@@ -49,7 +49,7 @@ template "#{node['steamcmd']['home']}/a3update.sh" do
   )
 end
 
-template File.join(node['steamcmd']['home'], 'a3update.txt') do
+template "#{node['steamcmd']['home']}/a3update.txt" do
   source "a3update.txt.erb"
   owner node['steamcmd']['user']
   group node['steamcmd']['group']
@@ -59,4 +59,13 @@ template File.join(node['steamcmd']['home'], 'a3update.txt') do
     :password => node['steamcmd']['steam']['password'],
     :install_dir => "#{node['steamcmd']['home']}/#{node['arma3']['app_name']}"
   )
+end
+
+home = node['steamcmd']['home']
+["#{home}/.local/share/Arma 3/", "#{home}/.local/share/Arma 3 - Other Profiles"].each do |path|
+  directory path do
+    owner node['steamcmd']['user']
+    group node['steamcmd']['group']
+    recursive true
+  end
 end
